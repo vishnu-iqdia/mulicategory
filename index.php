@@ -17,7 +17,7 @@
 	}
 
 	$link = create_link();
-	$categories = load($link, 'category');
+	$categories = load($link, 'category', 'l1');
 	display($categories);
 
 ?>
@@ -41,13 +41,24 @@
 		<table>
 			<tr>
 				<td>
-					<input type="text" name="data[cname]" placeholder="category name..."/>
+					<input type="text" name="data[cname]" placeholder="category name..." autocomplete="off"/>
 				</td>
 			</tr>
 			<tr>
 				<td>
 					<select name="data[parent_id]">
 						<option value='0'>null</option>
+						<?php
+							$options = '';
+							foreach ($categories as $key => $value) {
+								if($value['id'] === 0)
+									continue;
+								$options .= '<option value="'. $value["id"].'">';
+								$options .= $value['cname'];
+								$options .= '</option>';
+							}
+							echo $options;
+						?>
 					</select>
 				</td>
 			</tr>
@@ -70,8 +81,9 @@
 						$tbody .= "<tr>";
 						$tbody .= "<td>".$value['cname']."</td>";
 						$tbody .= "<td><a href='index.php?op=del_cat&cid=".$value['id']
-							   ."'>del</a></td>";						$tbody .= "<td><a href='index.php?op=del_cat&cid=".$value['id']
-							   ."'>del</a></td>";
+							   ."'>del</a></td>";						
+					    $tbody .= "<td><a href='index.php?op=view_sub_cat&cid=".$value['id']
+							   ."'>view sub-categories</a></td>";
 						$tbody .= "</tr>";
 					}
 					echo $tbody;

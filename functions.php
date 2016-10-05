@@ -17,13 +17,17 @@
 		
  	}
 
- 	function load($link, $param)
+ 	function load($link, $param, $level)
  	{
  		switch($param)
  		{
  			case 'category':
  				$response_data = array();
  				$sql = "SELECT * FROM categories";
+ 				$condition = '';
+ 				if($level === 'l1')
+ 					$condition = " where parent_id=0"; 
+ 				$sql .= $condition;
 				$result = $link->query($sql);
 				if ($result->num_rows > 0)
 				{
